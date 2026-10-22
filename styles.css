@@ -1,0 +1,150 @@
+/* ==========================================================================
+   Calendario Interactivo Colombia 2026 - Styles & Fallbacks
+   ========================================================================== */
+
+:root {
+  --color-brand-yellow: #f59e0b;
+  --color-brand-blue: #2563eb;
+  --color-brand-red: #dc2626;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --bg-color: #f8fafc;
+  --card-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+.dark {
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.8);
+}
+
+/* Day hover and selection animations */
+.day-cell {
+  transition: all 0.15s ease-in-out;
+}
+
+.day-cell:hover {
+  transform: translateY(-1px);
+}
+
+/* Glassmorphism effects */
+.glass-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Subtle pulse */
+@keyframes subtle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+}
+
+.badge-pulse {
+  animation: subtle-pulse 2.5s infinite ease-in-out;
+}
+
+/* Fallback utilities if CDN is delayed or blocked */
+.grid { display: grid; }
+.flex { display: flex; }
+.hidden { display: none !important; }
+.transition { transition: all 0.2s ease; }
+
+/* Print Styles - Optimized for Letter / A4 paper */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10pt;
+  }
+
+  /* Ocultar elementos no imprimibles */
+  header,
+  footer,
+  #next-holiday-banner,
+  .no-print,
+  #modal-backdrop,
+  #day-modal,
+  button,
+  input,
+  select {
+    display: none !important;
+  }
+
+  /* Asegurar que el calendario anual se imprima en formato limpio */
+  #view-annual {
+    display: block !important;
+  }
+
+  #annual-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+    page-break-inside: avoid;
+  }
+
+  .print-header {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .bg-white,
+  .dark\:bg-slate-800 {
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  .text-white {
+    color: #b91c1c !important;
+    font-weight: bold !important;
+  }
+
+  .bg-gradient-to-br {
+    background: #fee2e2 !important;
+    border: 1px solid #f87171 !important;
+  }
+}

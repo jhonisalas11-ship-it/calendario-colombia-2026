@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Interactivo 2026 - Festivos de Colombia</title>
+  <meta name="description" content="Calendario oficial e interactivo de Colombia 2026 con los 19 días festivos, puentes festivos bajo Ley Emiliani, planificador de vacaciones y notas personales.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            colombia: {
+              yellow: '#FCD116',
+              blue: '#003893',
+              red: '#CE1126'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- Encabezado con franja tricolor colombiana -->
+  <div class="h-1.5 w-full flex">
+    <div class="bg-amber-400 h-full w-1/2"></div>
+    <div class="bg-blue-600 h-full w-1/4"></div>
+    <div class="bg-red-600 h-full w-1/4"></div>
+  </div>
+
+  <!-- Header Principal -->
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 glass-header border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo y Título -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-primary-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20 font-black text-xl">
+          🇨🇴
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-xl text-slate-900 dark:text-white tracking-tight">
+              Colombia 2026
+            </h1>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-100 dark:bg-amber-950/80 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700">
+              19 Festivos
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">
+            Calendario Oficial • Ley Emiliani • Ley 2578
+          </p>
+        </div>
+      </div>
+
+      <!-- Selector de Vistas -->
+      <div class="flex items-center bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold no-print">
+        <button type="button" data-view-btn="annual" class="px-3.5 py-1.5 rounded-lg transition bg-white dark:bg-slate-700 shadow-sm text-primary-700 dark:text-white">
+          📅 Anual
+        </button>
+        <button type="button" data-view-btn="monthly" class="px-3.5 py-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          🗓️ Mes a Mes
+        </button>
+        <button type="button" data-view-btn="bridges" class="px-3.5 py-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          🌴 Puentes (16)
+        </button>
+        <button type="button" data-view-btn="list" class="px-3.5 py-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+          📋 Lista Festivos
+        </button>
+      </div>
+
+      <!-- Acciones Globales: Exportar, Imprimir, Tema -->
+      <div class="flex items-center gap-2 no-print">
+        <!-- Botón Exportar iCal -->
+        <button type="button" id="btn-export-ical" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition" title="Descargar todos los festivos para Google Calendar o Apple Calendar">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span class="hidden sm:inline">Exportar .ICS</span>
+        </button>
+
+        <!-- Botón Imprimir -->
+        <button type="button" id="btn-print" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition" title="Imprimir calendario 2026">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span class="hidden sm:inline">Imprimir</span>
+        </button>
+
+        <!-- Toggle Modo Oscuro -->
+        <button type="button" id="btn-theme-toggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Cambiar tema">
+          <span id="theme-icon-container">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Banner de Próximo Festivo -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 no-print">
+    <div id="next-holiday-banner" class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 dark:from-slate-800 dark:via-slate-800 dark:to-slate-850 p-3.5 rounded-2xl border border-emerald-200/80 dark:border-slate-700 shadow-sm transition">
+      <!-- Inyectado por JS -->
+    </div>
+  </div>
+
+  <!-- Resumen de Métricas / Stats -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 no-print">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      
+      <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-lg shrink-0">
+          19
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Total Festivos</div>
+          <div class="text-sm font-bold text-slate-800 dark:text-white">Oficiales 2026</div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold text-lg shrink-0">
+          16
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Puentes Festivos</div>
+          <div class="text-sm font-bold text-slate-800 dark:text-white">Fines de semana largos</div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0">
+          12
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Ley Emiliani</div>
+          <div class="text-sm font-bold text-slate-800 dark:text-white">Lunes trasladados</div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold text-lg shrink-0">
+          +1
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Nuevo Festivo</div>
+          <div class="text-sm font-bold text-slate-800 dark:text-white">Ley 2578 (13 Jul)</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contenedor Principal de Vistas -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- Leyenda de colores -->
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400 no-print">
+      <div class="flex flex-wrap items-center gap-4">
+        <span class="flex items-center gap-1.5">
+          <span class="w-3 h-3 rounded bg-red-500 inline-block shadow-sm"></span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">Día Festivo Nacional</span>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-3 h-3 rounded bg-amber-200 dark:bg-amber-800 inline-block"></span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">Puente de descanso</span>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-primary-500 inline-block"></span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">Con nota personal</span>
+        </span>
+      </div>
+
+      <!-- Buscador en tiempo real -->
+      <div class="relative w-full sm:w-64">
+        <input type="text" id="search-input" placeholder="Buscar festivo o fecha..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition">
+        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 1. VISTA ANUAL (12 MESES)                      -->
+    <!-- ============================================== -->
+    <section id="view-annual" class="transition-opacity">
+      <div id="annual-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Renderizado dinámicamente por app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 2. VISTA MENSUAL INDIVIDUAL                    -->
+    <!-- ============================================== -->
+    <section id="view-monthly" style="display: none;" class="transition-opacity">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Calendario mensual grande (3 columnas) -->
+        <div class="lg:col-span-3 bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+          
+          <!-- Controles de navegación de mes -->
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-3">
+              <h2 id="monthly-view-title" class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
+                Enero 2026
+              </h2>
+              <select id="month-select" class="text-xs bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-2.5 py-1 text-slate-700 dark:text-slate-200 font-medium">
+                <option value="0">Enero</option>
+                <option value="1">Febrero</option>
+                <option value="2">Marzo</option>
+                <option value="3">Abril</option>
+                <option value="4">Mayo</option>
+                <option value="5">Junio</option>
+                <option value="6">Julio</option>
+                <option value="7">Agosto</option>
+                <option value="8">Septiembre</option>
+                <option value="9">Octubre</option>
+                <option value="10">Noviembre</option>
+                <option value="11">Diciembre</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="btn-prev-month" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <button type="button" id="btn-next-month" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Nombres de los días -->
+          <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-bold text-slate-500 dark:text-slate-400">
+            <div class="text-rose-500">Domingo</div>
+            <div>Lunes</div>
+            <div>Martes</div>
+            <div>Miércoles</div>
+            <div>Jueves</div>
+            <div>Viernes</div>
+            <div class="text-slate-600 dark:text-slate-300">Sábado</div>
+          </div>
+
+          <!-- Cuadrícula de días -->
+          <div id="monthly-calendar-grid" class="grid grid-cols-7 gap-2">
+            <!-- Inyectado por JS -->
+          </div>
+
+        </div>
+
+        <!-- Sidebar del mes (1 columna) -->
+        <div class="space-y-4">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h3 class="font-bold text-slate-900 dark:text-white text-sm mb-3 flex items-center gap-2">
+              <span>🇨🇴 Festivos del Mes</span>
+            </h3>
+            <div id="monthly-sidebar-holidays" class="space-y-2.5">
+              <!-- Inyectado por JS -->
+            </div>
+          </div>
+
+          <div class="bg-primary-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-primary-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300">
+            <h4 class="font-bold text-primary-900 dark:text-primary-300 mb-1">📝 Tip Interactivo:</h4>
+            <p>Haz clic en cualquier celda para ver el fundamento de ley del festivo o para agendar tus notas y planes personales.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 3. VISTA PUENTES & VACACIONES                  -->
+    <!-- ============================================== -->
+    <section id="view-bridges" style="display: none;" class="transition-opacity">
+      <div id="bridges-list-container">
+        <!-- Inyectado por JS -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- 4. VISTA LISTA COMPLETA DE FESTIVOS           -->
+    <!-- ============================================== -->
+    <section id="view-list" style="display: none;" class="transition-opacity">
+      <!-- Filtros por categoría -->
+      <div class="mb-5 flex flex-wrap items-center gap-2 text-xs font-semibold">
+        <button type="button" data-filter-cat="all" class="px-3.5 py-1.5 rounded-lg transition bg-primary-600 text-white shadow-sm active">
+          Todos (19)
+        </button>
+        <button type="button" data-filter-cat="bridge" class="px-3.5 py-1.5 rounded-lg transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50">
+          Puentes Festivos (16)
+        </button>
+        <button type="button" data-filter-cat="emiliani" class="px-3.5 py-1.5 rounded-lg transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50">
+          Ley Emiliani (12)
+        </button>
+        <button type="button" data-filter-cat="patriot" class="px-3.5 py-1.5 rounded-lg transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50">
+          Patrios y Cívicos (5)
+        </button>
+        <button type="button" data-filter-cat="religious" class="px-3.5 py-1.5 rounded-lg transition bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50">
+          Religiosos (13)
+        </button>
+      </div>
+
+      <div id="holiday-list-container" class="space-y-3">
+        <!-- Inyectado por JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Interactivo de Día y Notas -->
+  <div id="day-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <!-- Backdrop oscuro -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
+    
+    <!-- Contenido del Modal -->
+    <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-700 z-10 transition transform">
+      
+      <!-- Botón de Cerrar -->
+      <button type="button" id="btn-close-modal" class="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <!-- Título de la Fecha -->
+      <h3 id="modal-date-title" class="text-base font-bold text-slate-900 dark:text-white pr-8">
+        Fecha seleccionada
+      </h3>
+
+      <!-- Detalles del Festivo -->
+      <div id="modal-holiday-info" class="mt-4">
+        <!-- Inyectado por JS -->
+      </div>
+
+      <!-- Sección de Notas Personales -->
+      <div class="mt-5 pt-4 border-t border-slate-100 dark:border-slate-700/60">
+        <label for="modal-note-text" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+          📝 Notas o Planes Personales (Guardado en tu navegador):
+        </label>
+        <textarea id="modal-note-text" rows="3" placeholder="Escribe aquí tus planes, viajes, reuniones o recordatorios para este día..." class="w-full p-3 text-xs rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition resize-none"></textarea>
+      </div>
+
+      <!-- Acciones del Modal -->
+      <div class="mt-4 flex items-center justify-between gap-2">
+        <button type="button" id="btn-delete-note" class="px-3 py-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition" style="display: none;">
+          Eliminar nota
+        </button>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition">
+            Cancelar
+          </button>
+          <button type="button" id="btn-save-note" class="px-5 py-2 text-xs font-bold bg-primary-600 hover:bg-primary-700 text-white rounded-xl shadow-md shadow-primary-500/20 transition">
+            Guardar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pie de Página -->
+  <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-xs text-slate-500 dark:text-slate-400 no-print transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span>🇨🇴 <strong>Calendario Colombia 2026</strong></span>
+        <span>•</span>
+        <span>Basado en Ley 51 de 1983 (Emiliani) y Ley 2578 de 2026</span>
+      </div>
+      <div>
+        <span>Listo para usar sin dependencias externas • Exportable a .ICS</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
